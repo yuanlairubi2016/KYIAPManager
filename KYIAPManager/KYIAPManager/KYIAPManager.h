@@ -52,14 +52,24 @@
 
 @property(nonatomic, assign) id<KYIAPPurchaseDelegate> kyIAPPurchaseDelegate;
 
-//获取单例
+/**
+ *获取单例
+ */
 + (KYIAPManager *)shareInstance;
 
 /**
  *  @brief 添加观察者,建议在delegate中的didFinishLaunchingWithOptions  调用。
- *
+ *  游戏中放到选择服务器后在调用/或者用户登录后再调用
  */
 - (void)addIAPObserver;
+
+
+/**
+ *  删除本地订单
+ *  
+ */
+- (void)removeQueueTransactions;
+
 
 /**
  *  @brief 判断是否允许应用内付费
@@ -67,7 +77,9 @@
  */
 - (BOOL)canMakePayments;
 
-//初始化产品id列表，用于请求产品信息
+/**
+ * @brief 初始化产品id列表，用于请求产品信息
+ */
 - (void)requestProductWithIdentifiers:(NSSet *)productIdentifiers;
 
 /**
@@ -78,5 +90,6 @@
  *  @param  callbackInfo:可以为nil，回调信息，
  */
 - (void)buyWithProductId:(NSString *)productId andQuantity:(NSUInteger )quantity andCallbackInfo:(NSString*)callbackInfo;
+
 
 @end

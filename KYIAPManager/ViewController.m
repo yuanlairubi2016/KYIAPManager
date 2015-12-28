@@ -23,13 +23,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    
-    
 
-    
-    
-    
     //
     [self payInit];
     
@@ -55,6 +49,11 @@
     }
     //设置支付协议
     [KYIAPManager shareInstance].kyIAPPurchaseDelegate = self;
+}
+
+- (void)dealloc {
+    //设置支付协议
+    [KYIAPManager shareInstance].kyIAPPurchaseDelegate = nil;
 }
 
 
@@ -135,13 +134,16 @@
     [self presentViewController:alertController animated:YES completion:nil];
     UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"好的" style:UIAlertActionStyleDefault handler:nil];
     [alertController addAction:okAction];
-        
-    
 }
 
 /** 购买失败，一般是网络的问题 **/
 - (void)didFailedWithError:(NSError *)error{
 }
 
+#pragma mark - remove transactions 
 
+- (IBAction)removeTransactions:(id)sender {
+    [[KYIAPManager shareInstance] removeQueueTransactions];
+    
+}
 @end

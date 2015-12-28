@@ -6,9 +6,14 @@
 //  Copyright © 2015年 KY. All rights reserved.
 //
 //  support iOS6 or later 
-
+//  地址是自己的服务器
 #define ORDERIDGETURL           @"http://104.131.159.174/shop/index.php/API/PayIAP/iapOrderID"
 #define RECEIPTPOSTURL          @"http://104.131.159.174/shop/index.php/API/PayIAP/receipt"
+
+#define ORDERIDKEY              @"order_id"
+#define PRODUCTIDKEY            @"product_id"
+#define RECEIPTKEY              @"receipt"
+#define TRANSACTIONKEY          @"transaction"
 
 
 #import "KYIAPManager.h"
@@ -51,7 +56,6 @@
 //添加观察者
 - (void)addIAPObserver {
     [[SKPaymentQueue defaultQueue] addTransactionObserver:self];
-    [self resendToServer];
 }
 
 - (void)dealloc {
@@ -63,41 +67,51 @@
     return [SKPaymentQueue canMakePayments];
 }
 
+//删除本地订单
+- (void)removeQueueTransactions {
+    NSArray<SKPaymentTransaction *> *transactions = [SKPaymentQueue defaultQueue].transactions;
+    for(SKPaymentTransaction *transaction in transactions) {
+        NSLog(@"transaction.payment.applicationUsername = %@",transaction.payment.applicationUsername);
+        NSLog(@"transaction.transactionState = %zd",transaction.transactionState);
+        if(transaction.transactionState == SKPaymentTransactionStatePurchased) {//1表示购买完成
+            [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
+        }
+    }
+}
+
+//刷新flesh
 - (void)refleshIAP {
     //iOS7之后
-    SKReceiptRefreshRequest *request = [[SKReceiptRefreshRequest alloc] init];
-    request.delegate = self;
-    [request start];
+    if(ISIOS7H){
+        SKReceiptRefreshRequest *request = [[SKReceiptRefreshRequest alloc] init];
+        request.delegate = self;
+        [request start];
+    }
 }
 
 #pragma mark - 获取产品信息列表
 //初始化商品id列表，用于请求产品信息
 - (void)requestProductWithIdentifiers:(NSSet *)productIdentifiers {
-    
-    
-    if (ISIOS7H){
-        SKProductsRequest * request = [[SKProductsRequest alloc] initWithProductIdentifiers:productIdentifiers];
-        request.delegate = self;
-        [request start];
-    }else{
-        
-    }
+    SKProductsRequest * request = [[SKProductsRequest alloc] initWithProductIdentifiers:productIdentifiers];
+    request.delegate = self;
+    [request start];
 }
 
 //商品信息－请求成功
 - (void)productsRequest:(SKProductsRequest *)request didReceiveResponse:(SKProductsResponse *)response {
-    self.products = response.products;
-    if(self.products && self.products.count>0){
-        NSLog(@"商品信息请求成功 = %@",self.products);
+    if(response.products && response.products.count>0){
         
+        self.products = response.products;
+        
+        NSLog(@"商品信息请求成功 = %@",self.products);
         if(self.kyIAPPurchaseDelegate && [self.kyIAPPurchaseDelegate respondsToSelector:@selector(kyProductInfo:)] ){
             [self.kyIAPPurchaseDelegate kyProductInfo:self.products];
         }
-        
     }else{
-        NSLog(@"商品信息为空，应该是productid或者boundle identifier 不对");
+        NSLog(@"商品信息为空，应该是productid或者boundle identifier 不对应");
     }
 }
+
 
 //商品信息－请求结果失败
 - (void)request:(SKRequest *)request didFailWithError:(NSError *)error {
@@ -162,24 +176,15 @@
     SKMutablePayment *payment = [SKMutablePayment paymentWithProduct:product];
     payment.quantity = self.quantity;
     
-    if (floor(NSFoundationVersionNumber) >= NSFoundationVersionNumber_iOS_7_0){
+    if (ISIOS7H){
         payment.applicationUsername = orderID;//这个是iOS7之后提供的方法
     }else{
+        //iOS6以及之前的方式
+        //一product。productIdentifier 作为key值保持订单，即使订单号和真正的订单不对应，也可以保证价格不会出错
+        NSDictionary *dic = [[NSDictionary alloc] initWithObjectsAndKeys:orderID,product.productIdentifier, nil];
+        [[KYIAPPlist shareInstance] writeToPlist:KYIAPPLIST andParams:dic];
     }
-    //订单记录、
-    //格式
-    //productID  => array(
-    //      "orderID"=>orderID,
-    //      "productID"=>productID,
-    //      "receipt"=>receipt,
-    //)
-    NSDictionary *dic = [[NSDictionary alloc] initWithObjectsAndKeys:orderID,@"orderID",product.productIdentifier,@"productID",nil];
-    NSDictionary *plistDic = [[NSDictionary alloc] initWithObjectsAndKeys:dic,product.productIdentifier, nil];
 
-    //重新下单会替换
-    [[KYIAPPlist shareInstance] writeToPlist:KYIAPPLIST andParams:plistDic];
-    
-    
     [[SKPaymentQueue defaultQueue] addPayment:payment];
 }
 
@@ -199,7 +204,7 @@
                 [self failedTransactionIn:transaction];
                 break;
             }
-                //已经购买过该商品
+                //已经购买过该商品，NOTE: consumble payment is NOT restorable
             case SKPaymentTransactionStateRestored:{
                 [self restoreTransactionIn:transaction];
                 break;
@@ -219,7 +224,6 @@
 //交易完成
 - (void)completeTransactionIn:(SKPaymentTransaction *)transaction {
     NSLog(@"用户支付完成");
-    
     //3、告诉我们的服务器购买完成了，用户支付完成
     [self sendToService:transaction];
     
@@ -227,7 +231,6 @@
         [self.kyIAPPurchaseDelegate kyCompleteTransactionIn:transaction];
     }
     
-//    self.isBuying = NO;//用户扣款完成，允许用户在没有收到物品的时候，再次发送购买请求
 }
 
 //交易失败
@@ -244,6 +247,8 @@
 
 //
 - (void)restoreTransactionIn:(SKPaymentTransaction *)transaction {
+    
+    [[SKPaymentQueue defaultQueue] restoreCompletedTransactions];
 //    SKPaymentTransactionStateRestored  非消耗性商品已经购买过，这时我们要按交易成功来处理。
     [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
 }
@@ -253,95 +258,54 @@
     NSLog(@"商品添加进购买列表");
 }
 
+//根据UserName去取
+- (void)restoreCompletedTransactionsWithApplicationUsername:(nullable NSString *)username {
+    
+}
+
 #pragma mark - 发送 === 验证信息 ===到起点的服务的方法
 - (void)sendToService:(SKPaymentTransaction *)transaction{
-    //receipt不同的获取方式。
-    NSString *receipt = @"";
-    NSData *data = nil;
-    
-
-    // iOS 7 or later.
-    NSURL *receiptFileURL = nil;
-    NSBundle *bundle = [NSBundle mainBundle];
-    if ([bundle respondsToSelector:@selector(appStoreReceiptURL)]) {
-        // Get the transaction receipt file path location in the app bundle.
-        receiptFileURL = [bundle appStoreReceiptURL];
-        data  = [NSData  dataWithContentsOfURL:receiptFileURL];
-//        receipt = [data base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed];
-        receipt = [data base64EncodedString];
-
-    }else{
-        // iOS 6.1 or earlier.
-        // Use SKPaymentTransaction's transactionReceipt.
-        data = [[NSData alloc] initWithData:transaction.transactionReceipt];
-        receipt = [data base64EncodedString];
-    }
-    
-    //base64EncodedString 加密后的。
-    receipt = [receipt stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    //去除掉首尾的空白字符和换行字符
-    receipt = [receipt stringByReplacingOccurrencesOfString:@"\r" withString:@""];
-    receipt = [receipt stringByReplacingOccurrencesOfString:@"\n" withString:@""];
-    
-    
+    NSString *receipt = [self receipt:transaction];
     //把base64加密后的数据数据对应订单号 发送给服务器
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
     NSString *orderID = @"";
     if (ISIOS7H){
          orderID = transaction.payment.applicationUsername;//这个是iOS7之后提供的方法
     }else{
-        NSDictionary *dic1 = [[KYIAPPlist shareInstance] readFromPlist:KYIAPPLIST andKey:transaction.payment.productIdentifier];
-        orderID = [dic1 objectForKey:transaction.payment.productIdentifier];
+        orderID = [[KYIAPPlist shareInstance] readFromPlist:KYIAPPLIST andKey:transaction.payment.productIdentifier];
     }
     
     NSLog(@"==============用户支付完成的orderID==============:%@",orderID);
 
     
     if(orderID){
-        [dic setObject:orderID forKey:@"order_id"];
+        [dic setObject:orderID forKey:ORDERIDKEY];
     }
     if(receipt){
-        [dic setObject:receipt forKey:@"order_receipt"];
+        [dic setObject:receipt forKey:RECEIPTKEY];
     }
     if(transaction.payment.productIdentifier){
-        [dic setObject:transaction.payment.productIdentifier forKey:@"product_id"];
+        [dic setObject:transaction.payment.productIdentifier forKey:PRODUCTIDKEY];
     }
-    //把整个transaction也放入dic
     if(transaction){
-        [dic setObject:transaction forKey:@"transaction"];
+        [dic setObject:transaction forKey:TRANSACTIONKEY];
     }
     
     [self sendReceiptToServer:dic];
-    //6、写入文件，对象保存出错了
-    NSDictionary *plistDic = [[NSDictionary alloc] initWithObjectsAndKeys:dic,transaction.payment.productIdentifier, nil];
-    [[KYIAPPlist shareInstance] writeToPlist:KYIAPPLIST andParams:plistDic];
+
 }
 
-//重新发送验证请求到服务器
-- (void)resendToServer {
-//    重文件中读取，如果还有没有发送的，就全部重新发送
-    NSDictionary *dic = [[KYIAPPlist shareInstance] readFromPlist:KYIAPPLIST];
-    NSArray *array = [dic allKeys];
-    for(NSString *key in array) {
-        NSDictionary *contentDic = [dic objectForKey:key];
-        [self sendReceiptToServer:contentDic];
-    }
-    NSLog(@"%@",dic);
-    NSLog(@"%@重新发送",@"KYIAP");
-}
 
 - (void)sendReceiptToServer:(NSDictionary *)dic {
-    NSString *productID = [dic objectForKey:@"product_id"];
-    SKPaymentTransaction *transaction = [dic objectForKey:@"transaction"];
-    NSString *receipt = [dic objectForKey:@"order_receipt"];
-    if(!receipt){
-        //移除plist中记录的内容
-        [[KYIAPPlist shareInstance] removeFromPlist:KYIAPPLIST andKey:productID];
+    
+    SKPaymentTransaction *transaction = [dic objectForKey:TRANSACTIONKEY];
+    NSString *receipt = [dic objectForKey:RECEIPTKEY];
+    if(!receipt || !transaction){
         return;
     }
     //不用把transaction 发送到服务器，把receipt发送到服务器就好了
     NSMutableDictionary *mutableDic = [[NSMutableDictionary alloc] initWithDictionary:dic];
-    [mutableDic removeObjectForKey:@"transaction"];
+    [mutableDic removeObjectForKey:TRANSACTIONKEY];
     
     //5、发送receipt
     [HTTPNSURLConnection postRequestWithURL:RECEIPTPOSTURL paramters:mutableDic finshedBlock:^(BOOL isSuccess, NSDictionary *resultDic) {
@@ -355,11 +319,40 @@
             //请求完成后使用
             NSLog(@"下发成功");
             //移除plist中记录的内容
-            [[KYIAPPlist shareInstance] removeFromPlist:KYIAPPLIST andKey:productID];
         }
-        if(transaction){
-            [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
-        }
+        
+        //注意：只有在服务器端明确返回收到客户端返回信息的时候 删除
+        [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
     }];
+}
+
+#pragma mark - receipt
+
+- (NSString *)receipt:(SKPaymentTransaction *)transaction {
+    //receipt不同的获取方式。
+    NSString *receipt = @"";
+    NSData *data = nil;
+    //    // iOS 7 or later.
+    NSURL *receiptFileURL = nil;
+    NSBundle *bundle = [NSBundle mainBundle];
+    if ([bundle respondsToSelector:@selector(appStoreReceiptURL)]) {
+        // Get the transaction receipt file path location in the app bundle.
+        receiptFileURL = [bundle appStoreReceiptURL];
+        data  = [NSData  dataWithContentsOfURL:receiptFileURL];
+        //        receipt = [data base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed];
+        receipt = [data base64EncodedString];
+        
+    }else{
+        data = [[NSData alloc] initWithData:transaction.transactionReceipt];
+        receipt = [data base64EncodedString];
+    }
+
+    //base64EncodedString 加密后的。
+    receipt = [receipt stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    //去除掉首尾的空白字符和换行字符
+    receipt = [receipt stringByReplacingOccurrencesOfString:@"\r" withString:@""];
+    receipt = [receipt stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+    
+    return receipt;
 }
 @end

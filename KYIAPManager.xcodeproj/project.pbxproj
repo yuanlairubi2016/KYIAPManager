@@ -7,9 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		326CCD5F1C07EB39003CE5E1 /* Readme.md in Sources */ = {isa = PBXBuildFile; fileRef = 326CCD5E1C07EB39003CE5E1 /* Readme.md */; };
+		3218C4021C3159DC001EA43E /* KYIAPPlist.m in Sources */ = {isa = PBXBuildFile; fileRef = 3218C4011C3159DC001EA43E /* KYIAPPlist.m */; };
 		326CCD621C07EF4D003CE5E1 /* HTTPNSURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 326CCD611C07EF4D003CE5E1 /* HTTPNSURLConnection.m */; };
-		327347101C05A36A007B9992 /* KYIAPPlist.m in Sources */ = {isa = PBXBuildFile; fileRef = 3273470F1C05A36A007B9992 /* KYIAPPlist.m */; };
 		3294B7F81C04012400C0FC48 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3294B7F71C04012400C0FC48 /* main.m */; };
 		3294B7FB1C04012400C0FC48 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3294B7FA1C04012400C0FC48 /* AppDelegate.m */; };
 		3294B7FE1C04012400C0FC48 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3294B7FD1C04012400C0FC48 /* ViewController.m */; };
@@ -18,15 +17,17 @@
 		3294B8061C04012400C0FC48 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3294B8041C04012400C0FC48 /* LaunchScreen.storyboard */; };
 		3294B8101C04019000C0FC48 /* KYIAPManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3294B80F1C04019000C0FC48 /* KYIAPManager.m */; };
 		3294B8121C04025800C0FC48 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3294B8111C04025800C0FC48 /* StoreKit.framework */; };
+		32D12CDD1C2A398800AA41E0 /* RMStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 32D12CDC1C2A398800AA41E0 /* RMStore.m */; };
+		32D12D361C2BF41C00AA41E0 /* RMStoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32D12D351C2BF41C00AA41E0 /* RMStoreViewController.m */; };
 		32DC2ACC1C04182B003C21B9 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 32DC2ACB1C04182B003C21B9 /* NSData+Base64.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3218C4001C3159DC001EA43E /* KYIAPPlist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KYIAPPlist.h; sourceTree = "<group>"; };
+		3218C4011C3159DC001EA43E /* KYIAPPlist.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KYIAPPlist.m; sourceTree = "<group>"; };
 		326CCD5E1C07EB39003CE5E1 /* Readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = "<group>"; };
 		326CCD601C07EF4D003CE5E1 /* HTTPNSURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTTPNSURLConnection.h; sourceTree = "<group>"; };
 		326CCD611C07EF4D003CE5E1 /* HTTPNSURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTPNSURLConnection.m; sourceTree = "<group>"; };
-		3273470E1C05A36A007B9992 /* KYIAPPlist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KYIAPPlist.h; sourceTree = "<group>"; };
-		3273470F1C05A36A007B9992 /* KYIAPPlist.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KYIAPPlist.m; sourceTree = "<group>"; };
 		3294B7F31C04012400C0FC48 /* KYIAPManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KYIAPManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3294B7F71C04012400C0FC48 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		3294B7F91C04012400C0FC48 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -40,6 +41,10 @@
 		3294B80E1C04019000C0FC48 /* KYIAPManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KYIAPManager.h; sourceTree = "<group>"; };
 		3294B80F1C04019000C0FC48 /* KYIAPManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KYIAPManager.m; sourceTree = "<group>"; };
 		3294B8111C04025800C0FC48 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		32D12CDB1C2A398800AA41E0 /* RMStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RMStore.h; path = KYIAP/RMStore.h; sourceTree = "<group>"; };
+		32D12CDC1C2A398800AA41E0 /* RMStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RMStore.m; path = KYIAP/RMStore.m; sourceTree = "<group>"; };
+		32D12D341C2BF41C00AA41E0 /* RMStoreViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMStoreViewController.h; sourceTree = "<group>"; };
+		32D12D351C2BF41C00AA41E0 /* RMStoreViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMStoreViewController.m; sourceTree = "<group>"; };
 		32DC2ACA1C04182B003C21B9 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
 		32DC2ACB1C04182B003C21B9 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -76,11 +81,14 @@
 		3294B7F51C04012400C0FC48 /* KYIAPManager */ = {
 			isa = PBXGroup;
 			children = (
+				32D12CD71C2A38EF00AA41E0 /* RMStore */,
 				3294B80D1C04017A00C0FC48 /* KYIAPManager */,
 				3294B7F91C04012400C0FC48 /* AppDelegate.h */,
 				3294B7FA1C04012400C0FC48 /* AppDelegate.m */,
 				3294B7FC1C04012400C0FC48 /* ViewController.h */,
 				3294B7FD1C04012400C0FC48 /* ViewController.m */,
+				32D12D341C2BF41C00AA41E0 /* RMStoreViewController.h */,
+				32D12D351C2BF41C00AA41E0 /* RMStoreViewController.m */,
 				3294B7FF1C04012400C0FC48 /* Main.storyboard */,
 				3294B8021C04012400C0FC48 /* Assets.xcassets */,
 				3294B8041C04012400C0FC48 /* LaunchScreen.storyboard */,
@@ -104,8 +112,8 @@
 				32DC2AC91C04182B003C21B9 /* NSData+Base64 */,
 				3294B80E1C04019000C0FC48 /* KYIAPManager.h */,
 				3294B80F1C04019000C0FC48 /* KYIAPManager.m */,
-				3273470E1C05A36A007B9992 /* KYIAPPlist.h */,
-				3273470F1C05A36A007B9992 /* KYIAPPlist.m */,
+				3218C4001C3159DC001EA43E /* KYIAPPlist.h */,
+				3218C4011C3159DC001EA43E /* KYIAPPlist.m */,
 				326CCD5E1C07EB39003CE5E1 /* Readme.md */,
 				326CCD601C07EF4D003CE5E1 /* HTTPNSURLConnection.h */,
 				326CCD611C07EF4D003CE5E1 /* HTTPNSURLConnection.m */,
@@ -119,6 +127,15 @@
 				3294B8111C04025800C0FC48 /* StoreKit.framework */,
 			);
 			name = Framework;
+			sourceTree = "<group>";
+		};
+		32D12CD71C2A38EF00AA41E0 /* RMStore */ = {
+			isa = PBXGroup;
+			children = (
+				32D12CDB1C2A398800AA41E0 /* RMStore.h */,
+				32D12CDC1C2A398800AA41E0 /* RMStore.m */,
+			);
+			name = RMStore;
 			sourceTree = "<group>";
 		};
 		32DC2AC91C04182B003C21B9 /* NSData+Base64 */ = {
@@ -200,14 +217,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				326CCD5F1C07EB39003CE5E1 /* Readme.md in Sources */,
 				3294B7FE1C04012400C0FC48 /* ViewController.m in Sources */,
 				3294B7FB1C04012400C0FC48 /* AppDelegate.m in Sources */,
+				3218C4021C3159DC001EA43E /* KYIAPPlist.m in Sources */,
+				32D12D361C2BF41C00AA41E0 /* RMStoreViewController.m in Sources */,
 				32DC2ACC1C04182B003C21B9 /* NSData+Base64.m in Sources */,
 				326CCD621C07EF4D003CE5E1 /* HTTPNSURLConnection.m in Sources */,
 				3294B8101C04019000C0FC48 /* KYIAPManager.m in Sources */,
 				3294B7F81C04012400C0FC48 /* main.m in Sources */,
-				327347101C05A36A007B9992 /* KYIAPPlist.m in Sources */,
+				32D12CDD1C2A398800AA41E0 /* RMStore.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -309,6 +327,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -322,6 +341,7 @@
 				INFOPLIST_FILE = KYIAPManager/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.eling.developtest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -334,6 +354,7 @@
 				INFOPLIST_FILE = KYIAPManager/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.eling.developtest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

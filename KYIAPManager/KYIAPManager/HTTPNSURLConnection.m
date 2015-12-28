@@ -39,6 +39,7 @@
                 httpNSURLConnection.finishBlock(YES,resultDic);
             }
         }else{
+            NSLog(@"%@",connectionError);
             if (httpNSURLConnection.finishBlock) {
                 httpNSURLConnection.finishBlock(NO,nil);
             }

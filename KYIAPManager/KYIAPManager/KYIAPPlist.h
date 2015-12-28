@@ -18,7 +18,7 @@ extern NSString * const KYIAPPLIST;
 
 - (void)writeToPlist:(NSString *)plistName andParams:(NSDictionary *)params;
 
-- (NSDictionary *)readFromPlist:(NSString *)plistName andKey:(NSString *)key;
+- (NSString *)readFromPlist:(NSString *)plistName andKey:(NSString *)key;
 
 - (void)removeFromPlist:(NSString *)plistName andKey:(NSString *)key;
 
