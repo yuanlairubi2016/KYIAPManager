@@ -14,7 +14,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="75c-Gy-jth"/>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="wvg-U0-d6I"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="152-TK-UHE" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -74,10 +74,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <navigationItem key="navigationItem" id="nuU-so-vhu"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cJ7-al-yIK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="440" y="1122"/>
+            <point key="canvasLocation" x="381" y="1128"/>
         </scene>
     </scenes>
 </document>
