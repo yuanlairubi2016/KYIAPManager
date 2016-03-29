@@ -47,9 +47,14 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="P9a-Ja-2k7">
-                        <barButtonItem key="rightBarButtonItem" title="remove transactions" id="zuD-WL-QSq">
+                        <barButtonItem key="leftBarButtonItem" title="remove transactions" id="zuD-WL-QSq">
                             <connections>
                                 <action selector="removeTransactions:" destination="BYZ-38-t0r" id="RRY-He-Aay"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="RMStore" id="BbJ-mU-phr">
+                            <connections>
+                                <action selector="rmStore:" destination="BYZ-38-t0r" id="157-mf-iXK"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -61,24 +66,38 @@
             </objects>
             <point key="canvasLocation" x="381" y="396"/>
         </scene>
-        <!--View Controller-->
-        <scene sceneID="5kb-Pb-M7z">
+        <!--Store View Controller-->
+        <scene sceneID="c5I-mJ-zmw">
             <objects>
-                <viewController id="dpd-SF-zV6" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="RMStoreViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="j9h-R0-4B9" customClass="RMStoreViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="fF8-2G-LOW"/>
-                        <viewControllerLayoutGuide type="bottom" id="WPQ-U8-aB5"/>
+                        <viewControllerLayoutGuide type="top" id="Oir-9V-WsS"/>
+                        <viewControllerLayoutGuide type="bottom" id="Nc5-x1-jsK"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="g7h-Iq-nJe">
+                    <view key="view" contentMode="scaleToFill" id="3tp-zu-Uli">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="zVZ-dv-gRD">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </tableView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="zVZ-dv-gRD" secondAttribute="trailing" id="BM1-p2-GPD"/>
+                            <constraint firstItem="zVZ-dv-gRD" firstAttribute="leading" secondItem="3tp-zu-Uli" secondAttribute="leading" id="HHt-vL-twa"/>
+                            <constraint firstItem="zVZ-dv-gRD" firstAttribute="top" secondItem="3tp-zu-Uli" secondAttribute="top" id="P2T-Gs-uQg"/>
+                            <constraint firstItem="Nc5-x1-jsK" firstAttribute="top" secondItem="zVZ-dv-gRD" secondAttribute="bottom" id="nea-om-BvE"/>
+                        </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="nuU-so-vhu"/>
+                    <connections>
+                        <outlet property="tableView" destination="zVZ-dv-gRD" id="3IV-z3-S1V"/>
+                    </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="cJ7-al-yIK" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ImT-QZ-1fV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="381" y="1128"/>
+            <point key="canvasLocation" x="1138" y="396"/>
         </scene>
     </scenes>
 </document>

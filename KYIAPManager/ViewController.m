@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import "KYIAPManager.h"
+#import "RMStoreViewController.h"
 
 @interface ViewController ()<UITableViewDataSource,UITableViewDelegate,KYIAPPurchaseDelegate>
 
@@ -25,6 +26,7 @@
     [super viewDidLoad];
 
     //
+    self.title = @"KYIAPManager";
     [self payInit];
     
     self.tableView.delegate = self;
@@ -140,10 +142,20 @@
 - (void)didFailedWithError:(NSError *)error{
 }
 
-#pragma mark - remove transactions 
-
+#pragma mark - remove transactions
 - (IBAction)removeTransactions:(id)sender {
     [[KYIAPManager shareInstance] removeQueueTransactions];
     
 }
+
+#pragma mark - RMStore
+- (IBAction)rmStore:(id)sender {
+    if(self.products && self.products.count>0){
+        RMStoreViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"RMStoreViewController"];
+        viewController.products = self.products;
+        viewController.array = self.array;
+        [self.navigationController pushViewController:viewController animated:YES];
+    }
+}
+
 @end

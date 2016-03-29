@@ -10,4 +10,8 @@
 
 @interface RMStoreViewController : UIViewController
 
+@property (nonatomic,strong) NSArray *array;
+
+@property (nonatomic,strong) NSArray *products;
+
 @end
