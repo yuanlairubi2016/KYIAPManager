@@ -12,13 +12,18 @@
 
 #define ISIOS7H ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
 
-@protocol KYIAPPurchaseDelegate <NSObject>
+@protocol KYIAPDelegate <NSObject>
 
 @optional
 /**
  *  @brief 获取商品信息
  */
 - (void)kyProductInfo:(NSArray *)products;
+
+/**
+ *  @brief 获取订单号失败
+ */
+- (void)kyGetOrderIdError:(NSError *)error;
 
 /**
  *  @brief 交易(付款)完成
@@ -50,23 +55,24 @@
 
 @interface KYIAPManager : NSObject
 
-@property(nonatomic, assign) id<KYIAPPurchaseDelegate> kyIAPPurchaseDelegate;
+
+@property(nonatomic, strong)NSArray *products;
 
 /**
- *获取单例
+ * @brief:获取单例
  */
 + (KYIAPManager *)shareInstance;
 
 /**
- *  @brief 添加观察者,建议在delegate中的didFinishLaunchingWithOptions  调用。
- *  游戏中放到选择服务器后在调用/或者用户登录后再调用
+ *  @brief:添加观察者,建议在delegate中的didFinishLaunchingWithOptions  调用。
+ *
  */
 - (void)addIAPObserver;
 
 
 /**
- *  删除本地订单
- *  
+ *  @brief:删除本地订单
+ *
  */
 - (void)removeQueueTransactions;
 
@@ -83,13 +89,19 @@
 - (void)requestProductWithIdentifiers:(NSSet *)productIdentifiers;
 
 /**
+ * @brief 初始化产品id列表，用于请求产品信息
+ */
+- (void)requestProductWithIdentifiers:(NSSet *)productIdentifiers andDelegate:(id<KYIAPDelegate>)delegate;
+
+/**
  *  @brief  请求订单 和上面的方法功能一致，多了个回调信息
  *
  *  @param  productId:产品ID
  *  @param  quantity:购买数量
  *  @param  callbackInfo:可以为nil，回调信息，
+ *  @param  回调delegate
  */
-- (void)buyWithProductId:(NSString *)productId andQuantity:(NSUInteger )quantity andCallbackInfo:(NSString*)callbackInfo;
+- (void)buyWithProductId:(NSString *)productId andQuantity:(NSUInteger )quantity andCallbackInfo:(NSString*)callbackInfo andDelegate:(id<KYIAPDelegate>)delegate;
 
 
 @end

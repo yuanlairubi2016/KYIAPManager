@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="cHt-2B-km9">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="cHt-2B-km9">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <scenes>
         <!--Navigation Controller-->
@@ -46,18 +46,7 @@
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="oIA-oU-IzG" secondAttribute="bottom" id="znX-So-kie"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="P9a-Ja-2k7">
-                        <barButtonItem key="leftBarButtonItem" title="remove transactions" id="zuD-WL-QSq">
-                            <connections>
-                                <action selector="removeTransactions:" destination="BYZ-38-t0r" id="RRY-He-Aay"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="RMStore" id="BbJ-mU-phr">
-                            <connections>
-                                <action selector="rmStore:" destination="BYZ-38-t0r" id="157-mf-iXK"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="P9a-Ja-2k7"/>
                     <connections>
                         <outlet property="tableView" destination="oIA-oU-IzG" id="B03-UF-hsU"/>
                     </connections>

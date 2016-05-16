@@ -8,20 +8,21 @@
 
 #import "ViewController.h"
 #import "KYIAPManager.h"
-#import "RMStoreViewController.h"
 
-@interface ViewController ()<UITableViewDataSource,UITableViewDelegate,KYIAPPurchaseDelegate>
+@interface ViewController ()<UITableViewDataSource,UITableViewDelegate,KYIAPDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic,strong) NSArray *array;
 
 @property (nonatomic,strong) NSArray *products;
-@property(nonatomic, strong) NSMutableArray *buyBtnArray;
 
 @end
 
 @implementation ViewController
 
+- (void)dealloc {
+    
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
 
@@ -40,7 +41,7 @@
                   @"com.eling.developtest.pay4",@"eling.freesubscription",
                   @"eling.consumable",@"eling.autorenewable",
                   @"eling.noconsumable",@"eling.nonrenewing",nil];
-    [[KYIAPManager shareInstance] requestProductWithIdentifiers:[NSSet setWithArray:self.array]];
+    [[KYIAPManager shareInstance] requestProductWithIdentifiers:[NSSet setWithArray:self.array] andDelegate:self];
 
     //支付开始
     if([[KYIAPManager shareInstance] canMakePayments]){//判断用户是否开启支付功能
@@ -49,31 +50,23 @@
     else{
         NSLog(@"请开启允许内置购买");
     }
-    //设置支付协议
-    [KYIAPManager shareInstance].kyIAPPurchaseDelegate = self;
 }
 
-- (void)dealloc {
-    //设置支付协议
-    [KYIAPManager shareInstance].kyIAPPurchaseDelegate = nil;
-}
+
 
 
 
 #pragma mark - Table View
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.products.count;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *cellN = @"CellN";
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellN];
@@ -84,17 +77,7 @@
     
     cell.textLabel.text = [_array objectAtIndex:indexPath.row];
     
-    UIButton *buyButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [buyButton setShowsTouchWhenHighlighted:YES];
-    
-    buyButton.frame = CGRectMake(5, 0, 100, 40);
-    buyButton.backgroundColor = [UIColor colorWithRed:0.318f green:0.729f blue:0.949f alpha:1.00f];
-    [buyButton setTitle:@"Buy" forState:UIControlStateNormal];
-    buyButton.tag = indexPath.row;
-    [buyButton addTarget:self action:@selector(buyButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
-    cell.accessoryType = UITableViewCellAccessoryNone;
-    cell.accessoryView = buyButton;
-    self.buyBtnArray[indexPath.row] = buyButton;
+    [self buyButton:cell];
     
     return cell;
 }
@@ -102,12 +85,26 @@
 - (void)buyButtonTapped:(UIButton *)button {
     
     NSString *productID = [self.array objectAtIndex:button.tag];
-    [[KYIAPManager shareInstance] buyWithProductId:productID andQuantity:1 andCallbackInfo:@"callback信息"];
+    [[KYIAPManager shareInstance] buyWithProductId:productID andQuantity:1 andCallbackInfo:@"callback信息" andDelegate:self];
     
 }
 
+- (void)buyButton:(UITableViewCell *)cell {
+    UIButton *buyButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [buyButton setShowsTouchWhenHighlighted:YES];
+    
+    buyButton.frame = CGRectMake(5, 0, 100, 40);
+    buyButton.backgroundColor = [UIColor colorWithRed:0.318f green:0.729f blue:0.949f alpha:1.00f];
+    [buyButton setTitle:@"Buy" forState:UIControlStateNormal];
+//    buyButton.tag = indexPath.row;
+    [buyButton addTarget:self action:@selector(buyButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+    cell.accessoryType = UITableViewCellAccessoryNone;
+    cell.accessoryView = buyButton;
+}
 
-#pragma mark - 购买结果
+#pragma mark - delegate 回调
+
+
 
 /**
  *  @brief 获取商品信息
@@ -142,20 +139,6 @@
 - (void)didFailedWithError:(NSError *)error{
 }
 
-#pragma mark - remove transactions
-- (IBAction)removeTransactions:(id)sender {
-    [[KYIAPManager shareInstance] removeQueueTransactions];
-    
-}
 
-#pragma mark - RMStore
-- (IBAction)rmStore:(id)sender {
-    if(self.products && self.products.count>0){
-        RMStoreViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"RMStoreViewController"];
-        viewController.products = self.products;
-        viewController.array = self.array;
-        [self.navigationController pushViewController:viewController animated:YES];
-    }
-}
 
 @end
