@@ -35,13 +35,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "KYIAPManager/KYIAPManager/HTTPNSURLConnection.m"
-            timestampString = "484639595.533348"
+            filePath = "KYIAPManager/ViewController.m"
+            timestampString = "495026744.497645"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "55"
-            endingLineNumber = "55"
-            landmarkName = "+postRequestWithURL:paramters:finshedBlock:"
+            startingLineNumber = "86"
+            endingLineNumber = "86"
+            landmarkName = "-buyButtonTapped:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

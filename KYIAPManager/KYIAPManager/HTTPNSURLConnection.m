@@ -32,18 +32,22 @@
     
 //    HTTPNSURLConnection *weakSelf = httpNSURLConnection;
     [NSURLConnection sendAsynchronousRequest:requset queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-        if(!connectionError){
-            NSError *error;
-            NSDictionary *resultDic = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
-            if (httpNSURLConnection.finishBlock) {
-                httpNSURLConnection.finishBlock(YES,resultDic);
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if(!connectionError){
+                NSError *error;
+                NSDictionary *resultDic = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+                if (httpNSURLConnection.finishBlock) {
+                    httpNSURLConnection.finishBlock(YES,resultDic);
+                }
+            }else{
+                NSLog(@"%@",connectionError);
+                if (httpNSURLConnection.finishBlock) {
+                    httpNSURLConnection.finishBlock(NO,nil);
+                }
             }
-        }else{
-            NSLog(@"%@",connectionError);
-            if (httpNSURLConnection.finishBlock) {
-                httpNSURLConnection.finishBlock(NO,nil);
-            }
-        }
+        });
+        
     }];
     
 }
@@ -73,17 +77,20 @@
 
     NSOperationQueue *queue = [[NSOperationQueue alloc] init];
     [NSURLConnection sendAsynchronousRequest:request queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-        if(!connectionError){
-            NSError *error;
-            NSDictionary *resultDic = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
-            if (httpNSURLConnection.finishBlock) {
-                httpNSURLConnection.finishBlock(YES,resultDic);
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if(!connectionError){
+                NSError *error;
+                NSDictionary *resultDic = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+                if (httpNSURLConnection.finishBlock) {
+                    httpNSURLConnection.finishBlock(YES,resultDic);
+                }
+            }else{
+                if (httpNSURLConnection.finishBlock) {
+                    httpNSURLConnection.finishBlock(NO,nil);
+                }
             }
-        }else{
-            if (httpNSURLConnection.finishBlock) {
-                httpNSURLConnection.finishBlock(NO,nil);
-            }
-        }
+        });
     }];
 
 }

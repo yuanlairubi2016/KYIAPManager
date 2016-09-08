@@ -9,8 +9,8 @@
 //
 //  地址是我本地的服务器
 //
-#define ORDERID_GET_URL           @"http://172.16.230.177/shop/index.php/API/PayIAP/iapOrderID"
-#define RECEIPT_POST_URL          @"http://172.16.230.177/shop/index.php/API/PayIAP/receipt"
+#define ORDERID_GET_URL           @"http://192.168.31.219/shop/index.php/API/PayIAP/iapOrderID"
+#define RECEIPT_POST_URL          @"http://192.168.31.219/shop/index.php/API/PayIAP/receipt"
 
 #define ORDERID_KEY               @"order_id"
 #define PRODUCTID_KEY             @"product_id"
