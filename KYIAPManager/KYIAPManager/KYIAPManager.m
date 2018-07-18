@@ -140,6 +140,7 @@
     SKProduct *product = [self product:productId];
     //2、向平台发送请求、获取我们自己服务器的订单号
     NSString *urlString = [NSString stringWithFormat:@"%@?productID=%@",ORDERID_GET_URL, productId];
+    NSLog(@"urlString = %@", urlString);
     [HTTPNSURLConnection getRequestWithURL:urlString paramters:nil finshedBlock:^(BOOL isSuccess, NSDictionary *resultDic) {
         if(isSuccess){
             NSString *code = [resultDic objectForKey:@"code"];
@@ -346,24 +347,39 @@
             }
             
         }
-        
+        NSLog(@"transaction = %@",transaction);
         //注意：只有在服务器端明确返回收到客户端返回信息的时候 删除
         [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
     }];
 }
 
-#pragma mark - receipt
 
+#pragma mark - receipt
+//iOS6 and before
 - (NSString *)receipt:(SKPaymentTransaction *)transaction {
+    //receipt不同的获取方式。
+    NSData *data = [[NSData alloc] initWithData:transaction.transactionReceipt];
+    NSString *receipt = [data base64EncodedString];
+    
+    //base64EncodedString 加密后的。
+    receipt = [receipt stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    //去除掉首尾的空白字符和换行字符
+    receipt = [receipt stringByReplacingOccurrencesOfString:@"\r" withString:@""];
+    receipt = [receipt stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+    
+    return receipt;
+}
+
+//new method iOS7 or later
+- (NSString *)receipt1:(SKPaymentTransaction *)transaction {
     //receipt不同的获取方式。
     NSString *receipt = @"";
     NSData *data = nil;
     //    // iOS 7 or later.
-    NSURL *receiptFileURL = nil;
     NSBundle *bundle = [NSBundle mainBundle];
     if ([bundle respondsToSelector:@selector(appStoreReceiptURL)]) {
         // Get the transaction receipt file path location in the app bundle.
-        receiptFileURL = [bundle appStoreReceiptURL];
+        NSURL *receiptFileURL = [bundle appStoreReceiptURL];
         data  = [NSData  dataWithContentsOfURL:receiptFileURL];
         //        receipt = [data base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed];
         receipt = [data base64EncodedString];
